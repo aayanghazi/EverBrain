@@ -43,7 +43,7 @@ src/everbrain/
 - [x] Project scaffolding
 - [x] Database foundation (SQLite)
 - [x] Configuration models (Pydantic)
-- [ ] `eb init` command
-- [ ] Session/task tracking
-- [ ] Handoff generation (Phase 2+)
-- [ ] Git integration (Phase 2+)
+- [x] eb init command
+- [x] Session/task tracking
+- [x] Handoff generation (Phase 2+)
+- [x] Git integration (Phase 2+)
