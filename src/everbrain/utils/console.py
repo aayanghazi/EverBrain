@@ -4,12 +4,20 @@ Provides a centralized console instance and helper functions for all CLI output.
 Ensures consistent, beautiful error messages and user feedback.
 """
 
+import sys
 from datetime import datetime
 from pathlib import Path
 
 from rich.console import Console
 from rich.panel import Panel
 from rich.style import Style
+
+# On Windows, we need to force UTF-8 to avoid UnicodeEncodeError when printing emojis/tree characters.
+if sys.platform == "win32":
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
+    if hasattr(sys.stderr, "reconfigure"):
+        sys.stderr.reconfigure(encoding="utf-8")
 
 # Global console instance used by all CLI commands
 console = Console()

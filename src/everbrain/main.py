@@ -1,9 +1,12 @@
-"""EverBrain CLI: Main entry point and command routing.
-
-Defines the Typer application and registers all command groups.
-"""
-
+import sys
 import typer
+
+# On Windows, we need to force UTF-8 to avoid UnicodeEncodeError when printing emojis/tree characters.
+if sys.platform == "win32":
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
+    if hasattr(sys.stderr, "reconfigure"):
+        sys.stderr.reconfigure(encoding="utf-8")
 
 from everbrain import __version__
 from everbrain.cli.graph import graph_command

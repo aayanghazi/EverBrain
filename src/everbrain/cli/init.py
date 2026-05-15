@@ -16,6 +16,8 @@ from everbrain.utils.console import (
     print_success,
     print_warning,
 )
+from everbrain.utils.version import get_project_python_version
+from everbrain.core.venv import create_internal_venv, install_optimized_dependencies
 
 
 def init_command(
@@ -104,17 +106,32 @@ def init_command(
             yaml.dump(config_dict, f, default_flow_style=False, sort_keys=False)
         print_success(f"Config written to {config_path.relative_to(project_root)}")
 
-        # Step 6: Create rules.yaml
+        # Step 6: Detect Python version and setup internal venv
+        print_step("Detecting project environment...")
+        python_version = get_project_python_version(project_root)
+        print_info(f"Detected Python version: {python_version}")
+        
+        venv_dir = create_internal_venv(project_root)
+        install_optimized_dependencies(venv_dir, python_version)
+
+        # Step 7: Create rules.yaml
         print_step("Creating rules.yaml...")
         default_rules = RulesConfig(
             architecture_notes="Add your architecture documentation here.",
             style_guide={
                 "line_length": 100,
-                "python_version": "3.11",
+                "python_version": python_version,
                 "type_checking": "strict",
+                "optimization_level": "isolated",
             },
             forbidden_patterns=[],
-            metadata={},
+            metadata={
+                "internal_venv": ".everbrain/internal_venv",
+                "optimizations": [
+                    "Isolated dependencies via internal venv",
+                    f"Optimized for Python {python_version}"
+                ]
+            },
         )
         rules_path = everbrain_dir / "rules.yaml"
         rules_dict = default_rules.model_dump()
